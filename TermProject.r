@@ -40,7 +40,7 @@ pop.bintree <- function(treein, name) {
   treein$data[i,]<-c(NA,NA,NA) #Lazy delete 
   #Remove the child and update the original tree:
  	#treein$data = treein$data[-i,,drop=F]
- 	assign(name, treein,.GlobalEnv)
+ 	assign(name, treein,parent.frame())
  	return(rtrn)
 }
 
@@ -51,10 +51,10 @@ push.bintree <- function(treein, xin, name) {
   #Check if root is initialized
   if(is.na(treein$data[1,1])){
     treein$data[1,1] <- xin
-    assign(name,treein,.GlobalEnv)
+    assign(name,treein,parent.frame())
   } else{#call recursive insert function
     treein <- tree_insert(treein, xin, name, 1)
-    assign(name,treein,.GlobalEnv)
+    assign(name,treein,parent.frame())
   }  
 }
 #Recursive insert function
@@ -99,49 +99,32 @@ tree_insert <- function(treein, xin, name, i){
 ###################################
 
 newstack <- function() {
-	rtn <- list(items=numeric(0))
+	rtn <- list(data=numeric(0))
 	class(rtn) <- "stack"
 	return (rtn)
 }
 
 print.stack <- function(stackin) {
 
-	print(stackin$items)
+	print(stackin$data)
 }
 
 pop.stack <- function(stackin, name) {
-	rtn <- stackin$items[1]
 
-	newlist = numeric(0)
-	if (length(stackin$items) >= 2) {
-		l <- length(stackin$items)
-		for (i in 2:l) {
-			newlist <- c(newlist, stackin$items[i])
-		}
-	}
-
-	stackin$items <- newlist
-	assign(name, stackin, .GlobalEnv)
-
+	rtn <- stackin$data[1]
+	stackin$data <- stackin$data[-1]
+	assign(name, stackin, parent.frame())
 	return (rtn)
 }
 
 push.stack <- function(stackin, xin, name) {
+
 	if (is.na(xin)) {
 		stop("Elements of a stack may not be NA")
 	}
-	rtn <- xin
 
-
-	if (length(stackin$items) > 0) {
-		l <- length(stackin$items)
-		for (i in 1:l) {
-			rtn <- c(rtn, stackin$items[i])
-		}
-	}
-
-	stackin$items <- rtn
-	assign(name, stackin, .GlobalEnv)
+	stackin$data <- c(xin, stackin$data)
+	assign(name, stackin, parent.frame())
 }
 
 ###################################
@@ -149,60 +132,33 @@ push.stack <- function(stackin, xin, name) {
 ###################################
 
 newqueue <- function() {
-	rtn <- list(items = c(NA))
+	rtn <- list(data=numeric())
 	class(rtn) <- "queue"
 	return (rtn)
 }
 
 print.queue <- function(qin) {
-	if (qin[1] != NA)
-	{
-		print(paste(qin, collapse = ', '))
-	}
+
+	print(qin$data)
 }
 
-pop.queue <- function(qin) {
-	rtn <- qin[1]
-	qin[1] <- NULL
+pop.queue <- function(qin, name) {
+
+	rtn <- qin$data[1]
+	qin$data <- qin$data[-1]
+	assign(name, qin, parent.frame())
 	return (rtn)
-	# does this update qin? would we need to return that as well?
 }
 
-push.queue <- function(qin, xin) {
-	if (xin == NA) {
+push.queue <- function(qin, xin, name) {
+
+	if (is.na(xin)) {
 		stop("Elements of a queue may not be NA")
 	}
 
-	if (qin[1] == NA) {
-		qin[1] <- xin
-	}
-	else {
-		nxt <- length(qin) + 1
-		qin[nxt] <- xin
-	}
-	
-	return (qin)
+	qin$data <- c(qin$data, xin)
+	assign(name, qin, parent.frame())
+
 }
 
-###################################
-########## TESTING CODE ###########
-###################################
-
-mytree <- newbintree()
-push(mytree,5,"mytree")
-push(mytree,4,"mytree")
-push(mytree,6,"mytree")
-push(mytree,6,"mytree")
-push(mytree,7,"mytree")
-push(mytree,8,"mytree")
-
-print(mytree$data)
-pop(mytree, "mytree")
-print(mytree$data)
-push(mytree,3,"mytree")
-print(mytree$data)
-
-element <- pop(mytree, "mytree")
-#print(element)
-#print(attributes(mytree))
 
