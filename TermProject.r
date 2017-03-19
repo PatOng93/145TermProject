@@ -4,11 +4,12 @@
 # constructors?
 # each class in its own file?
 
-push <- function(struct, xin) {
-	UseMethod('push')
+push <- function(struct, xin, name) {
+	#print(attributes(struct))
+	UseMethod('push', struct)
 }
 
-pop <- function(struct) {
+pop <- function(struct, name) {
 	UseMethod('pop')
 }
 
@@ -37,39 +38,56 @@ push.bintree <- function(treein, xin) {
 ###################################
 
 newstack <- function() {
-	rtn <- list(NA)
+	rtn <- list(items=numeric(0))
 	class(rtn) <- "stack"
 	return (rtn)
 }
 
 print.stack <- function(stackin) {
-	if (stackin[1] != NA)
-	{
-		print(paste(stackin, collapse = ', '))
-	}
+
+	print(stackin$items)
+
+	# if (length(stackin$items) > 0)
+	# {
+	# 	print(paste(stackin$items, collapse = ', '))
+	# }
 }
 
-pop.stack <- function(stackin) {
-	rtn <- stackin[1]
-	stackin[1] <- NULL
-	return (rtn)
-	# does this update stackin? would we need to return that as well?
-}
+pop.stack <- function(stackin, name) {
+	rtn <- stackin$items[1]
 
-push.stack <- function(stackin, xin) {
-	if (xin == NA) {
-		stop("Elements of a stack may not be NA")
-	}
-
-	rtn <- list(xin)
-	if (stackin[1] != NA) {
-		l <- length(stackin)
-		for (i in 1:l) {
-			rtn[i+1] <- stackin[i]
+	newlist = numeric(0)
+	if (length(stackin$items) >= 2) {
+		l <- length(stackin$items)
+		for (i in 2:l) {
+			newlist <- c(newlist, stackin$items[i])
 		}
 		# probably exists a more efficient way besides a loop
 	}
+
+	stackin$items <- newlist
+	assign(name, stackin, .GlobalEnv)
+
 	return (rtn)
+}
+
+push.stack <- function(stackin, xin, name) {
+	if (is.na(xin)) {
+		stop("Elements of a stack may not be NA")
+	}
+	rtn <- xin
+
+
+	if (length(stackin$items) > 0) {
+		l <- length(stackin$items)
+		for (i in 1:l) {
+			rtn <- c(rtn, stackin$items[i])
+		}
+		# probably exists a more efficient way besides a loop
+	}
+
+	stackin$items <- rtn
+	assign(name, stackin, .GlobalEnv)
 }
 
 ###################################
@@ -77,7 +95,7 @@ push.stack <- function(stackin, xin) {
 ###################################
 
 newqueue <- function() {
-	rtn <- list(NA)
+	rtn <- list(items = c(NA))
 	class(rtn) <- "queue"
 	return (rtn)
 }
