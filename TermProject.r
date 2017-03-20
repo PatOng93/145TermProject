@@ -22,8 +22,9 @@ newbintree <- function() {
 }
 
 print.bintree <- function(treein) {
-  print(treein$data)
-  
+  if (length(bintree$data != 0)) {
+    print(treein$data)
+  }
 }
 
 pop.bintree <- function(treein, name) {
@@ -46,7 +47,7 @@ pop.bintree <- function(treein, name) {
 
 push.bintree <- function(treein, xin, name) {
   if (is.na(xin)) {
-    stop("Elements of a stack may not be NA")
+    stop("Elements of a binary tree may not be NA")
   }
   #Check if root is initialized
   if(is.na(treein$data[1,1])){
@@ -54,7 +55,7 @@ push.bintree <- function(treein, xin, name) {
     assign(name,treein,parent.frame())
   } else{#call recursive insert function
     treein <- tree_insert(treein, xin, name, 1)
-    assign(name,treein,parent.frame())
+    return (treein)
   }  
 }
 #Recursive insert function
@@ -72,8 +73,7 @@ tree_insert <- function(treein, xin, name, i){
         treein$data <- rbind(treein$data,c(xin,NA,NA))#Add new row
         treein$data[i,2] <- dim(treein$data)[1]#Update parent to point to last row (which is the one just created)
         return(treein)
-      }
-      
+      }    
     }
   } else{#Right child
     if(!is.na(treein$data[i,3])){#If not na, recurse on child
@@ -89,7 +89,6 @@ tree_insert <- function(treein, xin, name, i){
         treein$data[i,3] <- dim(treein$data)[1]#Update parent to point to last row (which is the one just created)
         return(treein)
       }
-      
     }
   }
 }
@@ -105,12 +104,12 @@ newstack <- function() {
 }
 
 print.stack <- function(stackin) {
-
-	print(stackin$data)
+  if (length(stackin$data) != 0) {
+	  print(stackin$data)
+  }
 }
 
 pop.stack <- function(stackin, name) {
-
 	rtn <- stackin$data[1]
 	stackin$data <- stackin$data[-1]
 	assign(name, stackin, parent.frame())
@@ -118,13 +117,12 @@ pop.stack <- function(stackin, name) {
 }
 
 push.stack <- function(stackin, xin, name) {
-
 	if (is.na(xin)) {
 		stop("Elements of a stack may not be NA")
 	}
 
 	stackin$data <- c(xin, stackin$data)
-	assign(name, stackin, parent.frame())
+	return (stackin)
 }
 
 ###################################
@@ -138,8 +136,9 @@ newqueue <- function() {
 }
 
 print.queue <- function(qin) {
-
-	print(qin$data)
+  if (length(qin$data) != 0) {
+    print(qin$data)
+  }
 }
 
 pop.queue <- function(qin, name) {
@@ -157,7 +156,7 @@ push.queue <- function(qin, xin, name) {
 	}
 
 	qin$data <- c(qin$data, xin)
-	assign(name, qin, parent.frame())
+	return (qin)
 
 }
 
