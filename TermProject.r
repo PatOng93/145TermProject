@@ -132,7 +132,180 @@ push.stack <- function(stackin, xin, name) {
 newqueue <- function() {
 	rtn <- list(data=numeric())
 	class(rtn) <- "queue"
-	return (rtn)
+	return (rtn)###################################
+######## GENERIC FUNCTIONS ########
+###################################
+
+push <- function(struct, xin, name) {
+  UseMethod('push')
+}
+
+pop <- function(struct, name) {
+  UseMethod('pop')
+}
+
+###################################
+############# BINTREE #############
+###################################
+
+newbintree <- function() {
+  mat <- matrix(c(NA,NA,NA),nrow=1,ncol=3)
+  tree <- list(data = mat)
+  class(tree) <- "bintree"
+  return(tree)
+}
+
+print.bintree <- function(treein) {
+  print(treein$data)
+}
+
+pop.bintree <- function(treein, name) {
+  #Starting at Root, Continue accessing left child until it is NA (and therefore the lowest value)
+  previ <- 0
+  i <- 1
+  while(!is.na(treein$data[i,2])){
+     previ <- i
+     i=treein$data[i,2]
+  }
+  #Get the value of the lowest element:
+  treein$data[previ,2]<-NA
+  rtrn = treein$data[i,1]
+  treein$data[i,]<-c(NA,NA,NA) #Lazy delete 
+  #Remove the child and update the original tree:
+  #treein$data = treein$data[-i,,drop=F]
+  assign(name, treein,parent.frame())
+  return(rtrn)
+}
+
+push.bintree <- function(treein, xin, name) {
+  if (is.na(xin)) {
+    stop("Elements of a binary tree may not be NA")
+  }
+  #Check if root is initialized
+  if(is.na(treein$data[1,1])){
+    treein$data[1,1] <- xin
+    assign(name,treein,parent.frame())
+  } else{#call recursive insert function
+    treein <- tree_insert(treein, xin, name, 1)
+    return (treein)
+  }  
+}
+
+#Recursive insert function
+tree_insert <- function(treein, xin, name, i){
+  if(treein$data[i,1] > xin){ #Check if left child
+    if(!is.na(treein$data[i,2])){ #If not na, recurse on child
+      tree_insert(treein,xin,name,treein$data[i,2])
+    }else{#No child, insert new row and set to inserted value
+      if(anyNA(treein$data[,1])){#Check if there are any lazy-deleted rows in matrix
+        rownum_to_replace <- which(is.na(treein$data[,1]))[1]#Find first lazy-deleted row
+        treein$data[rownum_to_replace,] <- c(xin,NA,NA)#Assign new value to row
+        treein$data[i,2]<-rownum_to_replace #Updated parent node to point to new row
+        return(treein)
+      }else{
+        treein$data <- rbind(treein$data,c(xin,NA,NA))#Add new row
+        treein$data[i,2] <- dim(treein$data)[1]#Update parent to point to last row (which is the one just created)
+        return(treein)
+      }    
+    }
+  } else{#Right child
+    if(!is.na(treein$data[i,3])){#If not na, recurse on child
+      tree_insert(treein,xin,name,treein$data[i,3])
+    }else{#No child, insert new row and set to inserted value
+      if(anyNA(treein$data[,1])){#Check if there are any lazy-deleted rows in matrix
+        rownum_to_replace <- which(is.na(treein$data[,1]))[1]#Find first lazy-deleted row
+        treein$data[rownum_to_replace,] <- c(xin,NA,NA) #Assign new value to row
+        treein$data[i,3]<-rownum_to_replace #Updated parent node to point to new row
+        return(treein)
+      }else{#Add new row to matrix
+        treein$data <- rbind(treein$data,c(xin,NA,NA))#Add new row
+        treein$data[i,3] <- dim(treein$data)[1]#Update parent to point to last row (which is the one just created)
+        return(treein)
+      }
+    }
+  }
+}
+
+###################################
+############## STACK ##############
+###################################
+
+newstack <- function() {
+  rtn <- list(NA)
+  class(rtn) <- "stack"
+  return (rtn)
+}
+
+print.stack <- function(qin) {
+  if (!is.na(stackin[1])) {
+    for (i in 1:length(stackin)) {
+      cat(toString(stackin[i]))
+      cat(", ")
+    }
+    cat("\n")
+  }
+}
+
+pop.stack <- function(stackin, name) {
+  rtn <- stackin[1]
+  stackin <- stackin[-1]
+  if (length(stackin) == 0) {
+    stackin <- NA
+  }
+  assign(name, stackin, parent.frame())
+  return (rtn)
+}
+
+push.stack <- function(stackin, xin) {
+  if (is.na(xin)) {
+    stop("Elements of a stack may not be NA")
+  }
+  rtn <- list(xin)
+  for (i in 1:length(stackin)) {
+    rtn[i + 1] <- stackin[i]
+  }
+  return (stackin)
+}
+
+###################################
+############## QUEUE ##############
+###################################
+
+newqueue <- function() {
+  rtn <- list(NA)
+  class(rtn) <- "queue"
+  return (rtn)
+}
+
+print.queue <- function(qin) {
+  if (!is.na(qin[1])) {
+    for (i in 1:length(qin)) {
+      cat(toString(qin[i]))
+      cat(", ")
+    }
+    cat("\n")
+  }
+}
+
+pop.queue <- function(qin, name) {
+  rtn <- qin[1]
+  qin <- qin[-1]
+  if (length(qin) == 0) {
+    qin <- NA
+  }
+  assign(name, qin, parent.frame())
+  return (rtn)
+}
+
+push.queue <- function(qin, xin) {
+  if (is.na(xin)) {
+    stop("Elements of a queue may not be NA")
+  }
+  nxt <- length(qin) + 1
+  qin[nxt] <- xin
+  return (qin)
+}
+
 }
 
 print.queue <- function(qin) {
@@ -146,7 +319,180 @@ pop.queue <- function(qin, name) {
 	rtn <- qin$data[1]
 	qin$data <- qin$data[-1]
 	assign(name, qin, parent.frame())
-	return (rtn)
+	return (rtn)###################################
+######## GENERIC FUNCTIONS ########
+###################################
+
+push <- function(struct, xin, name) {
+  UseMethod('push')
+}
+
+pop <- function(struct, name) {
+  UseMethod('pop')
+}
+
+###################################
+############# BINTREE #############
+###################################
+
+newbintree <- function() {
+  mat <- matrix(c(NA,NA,NA),nrow=1,ncol=3)
+  tree <- list(data = mat)
+  class(tree) <- "bintree"
+  return(tree)
+}
+
+print.bintree <- function(treein) {
+  print(treein$data)
+}
+
+pop.bintree <- function(treein, name) {
+  #Starting at Root, Continue accessing left child until it is NA (and therefore the lowest value)
+  previ <- 0
+  i <- 1
+  while(!is.na(treein$data[i,2])){
+     previ <- i
+     i=treein$data[i,2]
+  }
+  #Get the value of the lowest element:
+  treein$data[previ,2]<-NA
+  rtrn = treein$data[i,1]
+  treein$data[i,]<-c(NA,NA,NA) #Lazy delete 
+  #Remove the child and update the original tree:
+  #treein$data = treein$data[-i,,drop=F]
+  assign(name, treein,parent.frame())
+  return(rtrn)
+}
+
+push.bintree <- function(treein, xin, name) {
+  if (is.na(xin)) {
+    stop("Elements of a binary tree may not be NA")
+  }
+  #Check if root is initialized
+  if(is.na(treein$data[1,1])){
+    treein$data[1,1] <- xin
+    assign(name,treein,parent.frame())
+  } else{#call recursive insert function
+    treein <- tree_insert(treein, xin, name, 1)
+    return (treein)
+  }  
+}
+
+#Recursive insert function
+tree_insert <- function(treein, xin, name, i){
+  if(treein$data[i,1] > xin){ #Check if left child
+    if(!is.na(treein$data[i,2])){ #If not na, recurse on child
+      tree_insert(treein,xin,name,treein$data[i,2])
+    }else{#No child, insert new row and set to inserted value
+      if(anyNA(treein$data[,1])){#Check if there are any lazy-deleted rows in matrix
+        rownum_to_replace <- which(is.na(treein$data[,1]))[1]#Find first lazy-deleted row
+        treein$data[rownum_to_replace,] <- c(xin,NA,NA)#Assign new value to row
+        treein$data[i,2]<-rownum_to_replace #Updated parent node to point to new row
+        return(treein)
+      }else{
+        treein$data <- rbind(treein$data,c(xin,NA,NA))#Add new row
+        treein$data[i,2] <- dim(treein$data)[1]#Update parent to point to last row (which is the one just created)
+        return(treein)
+      }    
+    }
+  } else{#Right child
+    if(!is.na(treein$data[i,3])){#If not na, recurse on child
+      tree_insert(treein,xin,name,treein$data[i,3])
+    }else{#No child, insert new row and set to inserted value
+      if(anyNA(treein$data[,1])){#Check if there are any lazy-deleted rows in matrix
+        rownum_to_replace <- which(is.na(treein$data[,1]))[1]#Find first lazy-deleted row
+        treein$data[rownum_to_replace,] <- c(xin,NA,NA) #Assign new value to row
+        treein$data[i,3]<-rownum_to_replace #Updated parent node to point to new row
+        return(treein)
+      }else{#Add new row to matrix
+        treein$data <- rbind(treein$data,c(xin,NA,NA))#Add new row
+        treein$data[i,3] <- dim(treein$data)[1]#Update parent to point to last row (which is the one just created)
+        return(treein)
+      }
+    }
+  }
+}
+
+###################################
+############## STACK ##############
+###################################
+
+newstack <- function() {
+  rtn <- list(NA)
+  class(rtn) <- "stack"
+  return (rtn)
+}
+
+print.stack <- function(qin) {
+  if (!is.na(stackin[1])) {
+    for (i in 1:length(stackin)) {
+      cat(toString(stackin[i]))
+      cat(", ")
+    }
+    cat("\n")
+  }
+}
+
+pop.stack <- function(stackin, name) {
+  rtn <- stackin[1]
+  stackin <- stackin[-1]
+  if (length(stackin) == 0) {
+    stackin <- NA
+  }
+  assign(name, stackin, parent.frame())
+  return (rtn)
+}
+
+push.stack <- function(stackin, xin) {
+  if (is.na(xin)) {
+    stop("Elements of a stack may not be NA")
+  }
+  rtn <- list(xin)
+  for (i in 1:length(stackin)) {
+    rtn[i + 1] <- stackin[i]
+  }
+  return (stackin)
+}
+
+###################################
+############## QUEUE ##############
+###################################
+
+newqueue <- function() {
+  rtn <- list(NA)
+  class(rtn) <- "queue"
+  return (rtn)
+}
+
+print.queue <- function(qin) {
+  if (!is.na(qin[1])) {
+    for (i in 1:length(qin)) {
+      cat(toString(qin[i]))
+      cat(", ")
+    }
+    cat("\n")
+  }
+}
+
+pop.queue <- function(qin, name) {
+  rtn <- qin[1]
+  qin <- qin[-1]
+  if (length(qin) == 0) {
+    qin <- NA
+  }
+  assign(name, qin, parent.frame())
+  return (rtn)
+}
+
+push.queue <- function(qin, xin) {
+  if (is.na(xin)) {
+    stop("Elements of a queue may not be NA")
+  }
+  nxt <- length(qin) + 1
+  qin[nxt] <- xin
+  return (qin)
+}
+
 }
 
 push.queue <- function(qin, xin, name) {
