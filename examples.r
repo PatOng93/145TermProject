@@ -13,7 +13,7 @@ testbintree <- function() {
 	print(mytree)
 	pop(mytree, "mytree")
 	print(mytree)
-	push(mytree,3)
+	mytree <- push(mytree,3)
 	print(mytree)
 
 	element <- pop(mytree, "mytree")
