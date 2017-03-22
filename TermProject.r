@@ -44,7 +44,7 @@ recursive_print <- function(treein, i){
   if(!is.na(treein$data[i,2])){
     recursive_print(treein, treein$data[i,2])
   }
-  cat(toString(treeein$data[i,1]))
+  cat(toString(treein$data[i,1]))
   cat(" ")
   if(!is.na(treein$data[i,3])){
     recursive_print(treein, treein$data[i,3])
@@ -157,7 +157,7 @@ print.stack <- function(stackin) {
   if (!is.na(stackin$data[1])) {
     for (i in 1:length(stackin$data)) {
       cat(toString(stackin$data[i]))
-      cat(", ")
+      cat(" ")
     }
 	  cat("\n")
   }
@@ -173,8 +173,8 @@ print.stack <- function(stackin) {
 pop.stack <- function(stackin, name) {
 	rtn <- stackin$data[1]
 	stackin$data <- stackin$data[-1]
-  if (length(stack$data) == 0) {
-    stack$data[1] <- NA
+  if (length(stackin$data) == 0) {
+    stackin$data[1] <- NA
   }
 	assign(name, stackin, parent.frame())
 	return (rtn)
@@ -192,7 +192,13 @@ push.stack <- function(stackin, xin) {
 		stop("Elements of a stack may not be NA")
 	}
 
-	stackin$data <- c(xin, stackin$data)
+  if (is.na(stackin$data[1])) {
+    stackin$data[1] <- xin
+  }
+  else {
+    stackin$data <- c(xin, stackin$data)
+  }
+  
 	return (stackin)
 }
 
@@ -223,7 +229,7 @@ print.queue <- function(qin) {
   if (!is.na(qin$data[1])) {
     for (i in 1:length(qin$data)) {
       cat(toString(qin$data[i]))
-      cat(", ")
+      cat(" ")
     }
     cat("\n")
   }
@@ -254,14 +260,18 @@ pop.queue <- function(qin, name) {
 #' @examples 
 #' myqueue <- push(myqueue, 10)
 push.queue <- function(qin, xin) {
-
 	if (is.na(xin)) {
 		stop("Elements of a queue may not be NA")
 	}
 
-	qin$data <- c(qin$data, xin)
+  if (is.na(qin$data[1])) {
+    qin$data[1] <- xin
+  }
+  else {
+    qin$data <- c(qin$data, xin)
+  }
+	
 	return (qin)
-
 }
 
 
