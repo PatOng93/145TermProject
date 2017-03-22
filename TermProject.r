@@ -54,7 +54,7 @@ pop.bintree <- function(treein, name) {
   #Get the value of the lowest element:
   rtrn = treein$data[i,1]
   #"Remove" the child and update the original tree:
-  treein$data[i,]<-c(NA,NA,NA) #Lazy delete 
+  treein$data[i,]<-c(NA,NA,NA) #Lazy delete
  	assign(name, treein,parent.frame())
  	return(rtrn)
 }
@@ -112,20 +112,27 @@ tree_insert <- function(treein, xin, i){
 ###################################
 
 newstack <- function() {
-	rtn <- list(data=numeric(0))
+	rtn <- list(data=c(NA))
 	class(rtn) <- "stack"
 	return (rtn)
 }
 
 print.stack <- function(stackin) {
-  if (length(stackin$data) != 0) {
-	  print(stackin$data)
+  if (!is.na(stackin$data[1])) {
+    for (i in 1:length(stackin$data)) {
+      cat(toString(stackin$data[i]))
+      cat(", ")
+    }
+	  cat("\n")
   }
 }
 
 pop.stack <- function(stackin, name) {
 	rtn <- stackin$data[1]
 	stackin$data <- stackin$data[-1]
+  if (length(stack$data) == 0) {
+    stack$data[1] <- NA
+  }
 	assign(name, stackin, parent.frame())
 	return (rtn)
 }
@@ -144,21 +151,28 @@ push.stack <- function(stackin, xin) {
 ###################################
 
 newqueue <- function() {
-	rtn <- list(data=numeric(0))
+
+	rtn <- list(data=c(NA))
 	class(rtn) <- "queue"
 	return (rtn)
 }
 
 print.queue <- function(qin) {
-  if (length(qin$data) != 0) {
-    print(qin$data)
+  if (!is.na(qin$data[1])) {
+    for (i in 1:length(qin$data)) {
+      cat(toString(qin$data[i]))
+      cat(", ")
+    }
+    cat("\n")
   }
 }
 
 pop.queue <- function(qin, name) {
-
 	rtn <- qin$data[1]
 	qin$data <- qin$data[-1]
+  if (length(qin$data) == 0) {
+    qin$data[1] <- NA
+  }
 	assign(name, qin, parent.frame())
 	return (rtn)
 }
