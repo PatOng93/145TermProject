@@ -46,3 +46,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 DESCRIPTION
+
+
+man/.RData
+man/.Rhistory
+
+.RData
+.Rhistory
