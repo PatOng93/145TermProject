@@ -2,7 +2,7 @@
 ######## GENERIC FUNCTIONS ########
 ###################################
 
-push <- function(struct, xin, name) {
+push <- function(struct, xin) {
 	UseMethod('push')
 }
 
@@ -70,7 +70,7 @@ pop.bintree <- function(treein, name) {
   #Get the value of the lowest element:
   rtrn = treein$data[i,1]
   #"Remove" the child and update the original tree:
-  treein$data[i,]<-c(NA,NA,NA) #Lazy delete 
+  treein$data[i,]<-c(NA,NA,NA) #Lazy delete
  	assign(name, treein,parent.frame())
  	return(rtrn)
 }
@@ -82,24 +82,24 @@ pop.bintree <- function(treein, name) {
 #' @return treein The modified treein object with the new element inserted 
 #' @examples 
 #' mytree <- push(mytree, 10)
-push.bintree <- function(treein, xin, name) {
+push.bintree <- function(treein, xin) {
   if (is.na(xin)) {
     stop("Elements of a binary tree may not be NA")
   }
   #Check if root is initialized
   if(is.na(treein$data[1,1])){
     treein$data[1,1] <- xin
-    assign(name,treein,parent.frame())
+    return(treein)
   } else{#call recursive insert function
-    treein <- tree_insert(treein, xin, name, 1)
+    treein <- tree_insert(treein, xin, 1)
     return (treein)
   }  
 }
 #Recursive insert function
-tree_insert <- function(treein, xin, name, i){
+tree_insert <- function(treein, xin, i){
   if(treein$data[i,1] > xin){ #Check if left child
     if(!is.na(treein$data[i,2])){ #If not na, recurse on child
-      tree_insert(treein,xin,name,treein$data[i,2])
+      tree_insert(treein,xin, treein$data[i,2])
     }else{#No child, insert new row and set to inserted value
       if(anyNA(treein$data[,1])){#Check if there are any lazy-deleted rows in matrix
         rownum_to_replace <- which(is.na(treein$data[,1]))[1]#Find first lazy-deleted row
@@ -114,7 +114,7 @@ tree_insert <- function(treein, xin, name, i){
     }
   } else{#Right child
     if(!is.na(treein$data[i,3])){#If not na, recurse on child
-      tree_insert(treein,xin,name,treein$data[i,3])
+      tree_insert(treein,xin,treein$data[i,3])
     }else{#No child, insert new row and set to inserted value
       if(anyNA(treein$data[,1])){#Check if there are any lazy-deleted rows in matrix
         rownum_to_replace <- which(is.na(treein$data[,1]))[1]#Find first lazy-deleted row
@@ -135,25 +135,32 @@ tree_insert <- function(treein, xin, name, i){
 ###################################
 
 newstack <- function() {
-	rtn <- list(data=numeric(0))
+	rtn <- list(data=c(NA))
 	class(rtn) <- "stack"
 	return (rtn)
 }
 
 print.stack <- function(stackin) {
-  if (length(stackin$data) != 0) {
-	  print(stackin$data)
+  if (!is.na(stackin$data[1])) {
+    for (i in 1:length(stackin$data)) {
+      cat(toString(stackin$data[i]))
+      cat(", ")
+    }
+	  cat("\n")
   }
 }
 
 pop.stack <- function(stackin, name) {
 	rtn <- stackin$data[1]
 	stackin$data <- stackin$data[-1]
+  if (length(stack$data) == 0) {
+    stack$data[1] <- NA
+  }
 	assign(name, stackin, parent.frame())
 	return (rtn)
 }
 
-push.stack <- function(stackin, xin, name) {
+push.stack <- function(stackin, xin) {
 	if (is.na(xin)) {
 		stop("Elements of a stack may not be NA")
 	}
@@ -167,26 +174,33 @@ push.stack <- function(stackin, xin, name) {
 ###################################
 
 newqueue <- function() {
-	rtn <- list(data=numeric())
+
+	rtn <- list(data=c(NA))
 	class(rtn) <- "queue"
 	return (rtn)
 }
 
 print.queue <- function(qin) {
-  if (length(qin$data) != 0) {
-    print(qin$data)
+  if (!is.na(qin$data[1])) {
+    for (i in 1:length(qin$data)) {
+      cat(toString(qin$data[i]))
+      cat(", ")
+    }
+    cat("\n")
   }
 }
 
 pop.queue <- function(qin, name) {
-
 	rtn <- qin$data[1]
 	qin$data <- qin$data[-1]
+  if (length(qin$data) == 0) {
+    qin$data[1] <- NA
+  }
 	assign(name, qin, parent.frame())
 	return (rtn)
 }
 
-push.queue <- function(qin, xin, name) {
+push.queue <- function(qin, xin) {
 
 	if (is.na(xin)) {
 		stop("Elements of a queue may not be NA")
