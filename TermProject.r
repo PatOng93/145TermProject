@@ -116,6 +116,9 @@ print.stack <- function(stackin) {
 pop.stack <- function(stackin, name) {
 	rtn <- stackin$data[1]
 	stackin$data <- stackin$data[-1]
+  if (length(stackin$data) == 0) {
+    stackin$data[1] <- NA
+  }
 	assign(name, stackin, parent.frame())
 	return (rtn)
 }
@@ -125,7 +128,13 @@ push.stack <- function(stackin, xin) {
 		stop("Elements of a stack may not be NA")
 	}
 
-	stackin$data <- c(xin, stackin$data)
+  if (is.na(stackin$data[1])) {
+    stackin$data[1] <- xin
+  }
+  else {
+    stackin$data <- c(xin, stackin$data)
+  }
+  
 	return (stackin)
 }
 
@@ -160,14 +169,18 @@ pop.queue <- function(qin, name) {
 }
 
 push.queue <- function(qin, xin) {
-
 	if (is.na(xin)) {
 		stop("Elements of a queue may not be NA")
 	}
 
-	qin$data <- c(qin$data, xin)
+  if (is.na(qin$data[1])) {
+    qin$data[1] <- xin
+  }
+  else {
+    qin$data <- c(qin$data, xin)  
+  }
+	
 	return (qin)
-
 }
 
 
