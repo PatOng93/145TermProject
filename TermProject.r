@@ -54,7 +54,7 @@ push.bintree <- function(treein, xin) {
     treein$data[1,1] <- xin
     return(treein)
   } else{#call recursive insert function
-    treein <- tree_insert(treein, xin, name, 1)
+    treein <- tree_insert(treein, xin, 1)
     return (treein)
   }  
 }
