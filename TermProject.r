@@ -34,13 +34,13 @@ pop.bintree <- function(treein, name) {
   while(!is.na(treein$data[i,2])){
      previ <- i
      i=treein$data[i,2]
-   }
-  #Get the value of the lowest element:
+  }
+  #Set the parent node's left child to NA
   treein$data[previ,2]<-NA
+  #Get the value of the lowest element:
   rtrn = treein$data[i,1]
+  #"Remove" the child and update the original tree:
   treein$data[i,]<-c(NA,NA,NA) #Lazy delete 
-  #Remove the child and update the original tree:
- 	#treein$data = treein$data[-i,,drop=F]
  	assign(name, treein,parent.frame())
  	return(rtrn)
 }
