@@ -3,17 +3,17 @@
 testbintree <- function() {
 
 	mytree <- newbintree()
-	push(mytree,5,"mytree")
-	push(mytree,4,"mytree")
-	push(mytree,6,"mytree")
-	push(mytree,6,"mytree")
-	push(mytree,7,"mytree")
-	push(mytree,8,"mytree")
+	push(mytree,5)
+	push(mytree,4)
+	push(mytree,6)
+	push(mytree,6)
+	push(mytree,7)
+	push(mytree,8)
 
 	print(mytree$data)
 	pop(mytree, "mytree")
 	print(mytree$data)
-	push(mytree,3,"mytree")
+	push(mytree,3)
 	print(mytree$data)
 
 	element <- pop(mytree, "mytree")
@@ -25,10 +25,10 @@ testbintree <- function() {
 teststack <- function() {
 
 	mystack <- newstack()
-	push(mystack, 5, "mystack")
-	push(mystack, 10, "mystack")
-	push(mystack, 15, "mystack")
-	push(mystack, 20, "mystack")
+	push(mystack, 5)
+	push(mystack, 10)
+	push(mystack, 15)
+	push(mystack, 20
 	push(mystack, 25, "mystack")
 	print(mystack$data)
 	pop(mystack, "mystack")

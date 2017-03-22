@@ -2,7 +2,7 @@
 ######## GENERIC FUNCTIONS ########
 ###################################
 
-push <- function(struct, xin, name) {
+push <- function(struct, xin) {
 	UseMethod('push')
 }
 
@@ -45,24 +45,24 @@ pop.bintree <- function(treein, name) {
  	return(rtrn)
 }
 
-push.bintree <- function(treein, xin, name) {
+push.bintree <- function(treein, xin) {
   if (is.na(xin)) {
     stop("Elements of a binary tree may not be NA")
   }
   #Check if root is initialized
   if(is.na(treein$data[1,1])){
     treein$data[1,1] <- xin
-    assign(name,treein,parent.frame())
+    return(treein)
   } else{#call recursive insert function
     treein <- tree_insert(treein, xin, name, 1)
     return (treein)
   }  
 }
 #Recursive insert function
-tree_insert <- function(treein, xin, name, i){
+tree_insert <- function(treein, xin, i){
   if(treein$data[i,1] > xin){ #Check if left child
     if(!is.na(treein$data[i,2])){ #If not na, recurse on child
-      tree_insert(treein,xin,name,treein$data[i,2])
+      tree_insert(treein,xin, treein$data[i,2])
     }else{#No child, insert new row and set to inserted value
       if(anyNA(treein$data[,1])){#Check if there are any lazy-deleted rows in matrix
         rownum_to_replace <- which(is.na(treein$data[,1]))[1]#Find first lazy-deleted row
@@ -77,7 +77,7 @@ tree_insert <- function(treein, xin, name, i){
     }
   } else{#Right child
     if(!is.na(treein$data[i,3])){#If not na, recurse on child
-      tree_insert(treein,xin,name,treein$data[i,3])
+      tree_insert(treein,xin,treein$data[i,3])
     }else{#No child, insert new row and set to inserted value
       if(anyNA(treein$data[,1])){#Check if there are any lazy-deleted rows in matrix
         rownum_to_replace <- which(is.na(treein$data[,1]))[1]#Find first lazy-deleted row
@@ -116,7 +116,7 @@ pop.stack <- function(stackin, name) {
 	return (rtn)
 }
 
-push.stack <- function(stackin, xin, name) {
+push.stack <- function(stackin, xin) {
 	if (is.na(xin)) {
 		stop("Elements of a stack may not be NA")
 	}
@@ -130,7 +130,7 @@ push.stack <- function(stackin, xin, name) {
 ###################################
 
 newqueue <- function() {
-	rtn <- list(data=numeric())
+	rtn <- list(data=numeric(0))
 	class(rtn) <- "queue"
 	return (rtn)
 }
@@ -149,7 +149,7 @@ pop.queue <- function(qin, name) {
 	return (rtn)
 }
 
-push.queue <- function(qin, xin, name) {
+push.queue <- function(qin, xin) {
 
 	if (is.na(xin)) {
 		stop("Elements of a queue may not be NA")
