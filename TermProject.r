@@ -14,6 +14,12 @@ pop <- function(struct, name) {
 ############# BINTREE #############
 ###################################
 
+#' Create a new Binary Tree data structure
+#' 
+#' @param none
+#' @return An S3 class of type "bintree", with a member matrix initialized to one row of NAs
+#' @examples 
+#' mytree <- newbintree()
 newbintree <- function() {
   mat <- matrix(c(NA,NA,NA),nrow=1,ncol=3)
   tree <- list(data = mat)
@@ -21,10 +27,14 @@ newbintree <- function() {
   return(tree)
 }
 
+#' Prints a binary tree in sorted order, with elements separated by commas
+#' 
+#' @param treein A bintree class object
+#' @return none
+#' @examples 
+#' print(mytree)
 print.bintree <- function(treein) {
-  if (length(treein$data == 0) || is.na(treein$data[1,1])) {
-    stop("Cannot brint an empty binary tree")
-  }else{
+  if (length(treein$data) != 0 && !is.na(treein$data[1,1])) {
     recursive_print(treein, 1)
   }
 }
@@ -40,7 +50,13 @@ recursive_print <- function(treein, i){
   }  
 }
 
-
+#' Return and remove the smallest element in the binary tree
+#' 
+#' @param treein A bintree class object
+#' @param name The string object equivalent to the name of the treein parameter
+#' @return rtrn The smallest element in treein
+#' @examples 
+#' element <- pop(mytree, "mytree")
 pop.bintree <- function(treein, name) {
  	#Starting at Root, Continue accessing left child until it is NA (and therefore the lowest value)
   previ <- 0
@@ -59,6 +75,13 @@ pop.bintree <- function(treein, name) {
  	return(rtrn)
 }
 
+#' Insert an element into the binary tree
+#' 
+#' @param treein A bintree class object
+#' @param xin The element to add to the tree
+#' @return treein The modified treein object with the new element inserted 
+#' @examples 
+#' mytree <- push(mytree, 10)
 push.bintree <- function(treein, xin, name) {
   if (is.na(xin)) {
     stop("Elements of a binary tree may not be NA")
