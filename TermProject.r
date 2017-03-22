@@ -98,14 +98,18 @@ tree_insert <- function(treein, xin, name, i){
 ###################################
 
 newstack <- function() {
-	rtn <- list(data=numeric(0))
+	rtn <- list(data=c(NA))
 	class(rtn) <- "stack"
 	return (rtn)
 }
 
 print.stack <- function(stackin) {
-  if (length(stackin$data) != 0) {
-	  print(stackin$data)
+  if (!is.na(stackin$data[1])) {
+    for (i in 1:length(stackin$data)) {
+      cat(toString(stackin$data[i]))
+      cat(", ")
+    }
+	  cat("\n")
   }
 }
 
@@ -116,7 +120,7 @@ pop.stack <- function(stackin, name) {
 	return (rtn)
 }
 
-push.stack <- function(stackin, xin, name) {
+push.stack <- function(stackin, xin) {
 	if (is.na(xin)) {
 		stop("Elements of a stack may not be NA")
 	}
@@ -130,26 +134,32 @@ push.stack <- function(stackin, xin, name) {
 ###################################
 
 newqueue <- function() {
-	rtn <- list(data=numeric())
+	rtn <- list(data=c(NA))
 	class(rtn) <- "queue"
 	return (rtn)
 }
 
 print.queue <- function(qin) {
-  if (length(qin$data) != 0) {
-    print(qin$data)
+  if (!is.na(qin$data[1])) {
+    for (i in 1:length(qin$data)) {
+      cat(toString(qin$data[i]))
+      cat(", ")
+    }
+    cat("\n")
   }
 }
 
 pop.queue <- function(qin, name) {
-
 	rtn <- qin$data[1]
 	qin$data <- qin$data[-1]
+  if (length(qin$data) == 0) {
+    qin$data[1] <- NA
+  }
 	assign(name, qin, parent.frame())
 	return (rtn)
 }
 
-push.queue <- function(qin, xin, name) {
+push.queue <- function(qin, xin) {
 
 	if (is.na(xin)) {
 		stop("Elements of a queue may not be NA")

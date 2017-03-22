@@ -1,0 +1,18 @@
+Package: tsq
+Version: 1
+Author: Patrick Ong, Christian Pickett, Domnall Hegarty, Andrew van Tonningen
+Maintainer: Us
+Title: Tools for the TSQ Package
+Description: Miscellaneous utilities for parallelizing large
+   computations.  Alternative to MapReduce.
+   File splitting and distributed operations such as sort and aggregate.
+   "Software Alchemy" method for parallelizing most statistical methods,
+   presented in N. Matloff, Parallel Computation for Data Science,
+   Chapman and Hall, 2015.  Includes a debugging aid.
+Depends: regtools,parallel,stats,utils,data.table,pdist,methods
+Suggests: rpart,e1071
+ByteCompile: yes
+NeedsCompilation: no
+License: GPL (>= 2)
+URL: https://github.com/matloff/partools
+BugReports: https://github.com/matloff/partools/issues
