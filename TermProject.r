@@ -22,10 +22,24 @@ newbintree <- function() {
 }
 
 print.bintree <- function(treein) {
-  if (length(bintree$data != 0)) {
-    print(treein$data)
+  if (length(treein$data == 0) || is.na(treein$data[1,1])) {
+    stop("Cannot brint an empty binary tree")
+  }else{
+    recursive_print(treein, 1)
   }
 }
+
+recursive_print <- function(treein, i){
+  if(!is.na(treein$data[i,2])){
+    recursive_print(treein, treein$data[i,2])
+  }
+  cat(toString(treeein$data[i,1]))
+  cat(", ")
+  if(!is.na(treein$data[i,3])){
+    recursive_print(treein, treein$data[i,3])
+  }  
+}
+
 
 pop.bintree <- function(treein, name) {
  	#Starting at Root, Continue accessing left child until it is NA (and therefore the lowest value)
@@ -34,13 +48,13 @@ pop.bintree <- function(treein, name) {
   while(!is.na(treein$data[i,2])){
      previ <- i
      i=treein$data[i,2]
-   }
-  #Get the value of the lowest element:
+  }
+  #Set the parent node's left child to NA
   treein$data[previ,2]<-NA
+  #Get the value of the lowest element:
   rtrn = treein$data[i,1]
+  #"Remove" the child and update the original tree:
   treein$data[i,]<-c(NA,NA,NA) #Lazy delete 
-  #Remove the child and update the original tree:
- 	#treein$data = treein$data[-i,,drop=F]
  	assign(name, treein,parent.frame())
  	return(rtrn)
 }
