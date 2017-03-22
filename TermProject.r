@@ -27,7 +27,7 @@ newbintree <- function() {
   return(tree)
 }
 
-#' Prints a binary tree in sorted order, with elements separated by commas
+#' Prints a binary tree in sorted order, with elements separated by spaces
 #' 
 #' @param treein A bintree class object
 #' @return none
@@ -37,6 +37,7 @@ print.bintree <- function(treein) {
   if (length(treein$data) != 0 && !is.na(treein$data[1,1])) {
     recursive_print(treein, 1)
   }
+  cat("\n")
 }
 
 recursive_print <- function(treein, i){
@@ -44,7 +45,7 @@ recursive_print <- function(treein, i){
     recursive_print(treein, treein$data[i,2])
   }
   cat(toString(treeein$data[i,1]))
-  cat(", ")
+  cat(" ")
   if(!is.na(treein$data[i,3])){
     recursive_print(treein, treein$data[i,3])
   }  
@@ -53,7 +54,7 @@ recursive_print <- function(treein, i){
 #' Return and remove the smallest element in the binary tree
 #' 
 #' @param treein A bintree class object
-#' @param name The string object equivalent to the name of the treein parameter
+#' @param name The string equivalent to the name of the treein parameter
 #' @return rtrn The smallest element in treein
 #' @examples 
 #' element <- pop(mytree, "mytree")
@@ -134,12 +135,24 @@ tree_insert <- function(treein, xin, i){
 ############## STACK ##############
 ###################################
 
+#' Create a new Binary Tree data structure
+#' 
+#' @param none
+#' @return An S3 class of type "stack", with a member vector initialized to NA
+#' @examples 
+#' mystack <- newstack()
 newstack <- function() {
 	rtn <- list(data=c(NA))
 	class(rtn) <- "stack"
 	return (rtn)
 }
 
+#' Prints the elements of a stack object separated by spaces
+#' 
+#' @param stackin A stack class object
+#' @return none
+#' @examples 
+#' print(mystack)
 print.stack <- function(stackin) {
   if (!is.na(stackin$data[1])) {
     for (i in 1:length(stackin$data)) {
@@ -150,6 +163,13 @@ print.stack <- function(stackin) {
   }
 }
 
+#' Return and remove the top element in a stack object
+#' 
+#' @param stackin A stack class object
+#' @param name The string equivalent to the name of the stackin parameter
+#' @return rtrn The top element in stackin
+#' @examples 
+#' element <- pop(mystack, "mystack")
 pop.stack <- function(stackin, name) {
 	rtn <- stackin$data[1]
 	stackin$data <- stackin$data[-1]
@@ -160,6 +180,13 @@ pop.stack <- function(stackin, name) {
 	return (rtn)
 }
 
+#' Insert an element onto the stack
+#' 
+#' @param stackin A stack class object
+#' @param xin The element to add to the stack
+#' @return stackin The modified stack object with the new element inserted 
+#' @examples 
+#' mystack <- push(mystack, 10)
 push.stack <- function(stackin, xin) {
 	if (is.na(xin)) {
 		stop("Elements of a stack may not be NA")
