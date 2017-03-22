@@ -43,7 +43,7 @@ recursive_print <- function(treein, i){
   if(!is.na(treein$data[i,2])){
     recursive_print(treein, treein$data[i,2])
   }
-  cat(toString(treeein$data[i,1]))
+  cat(toString(treein$data[i,1]))
   cat(", ")
   if(!is.na(treein$data[i,3])){
     recursive_print(treein, treein$data[i,3])
@@ -144,7 +144,7 @@ print.stack <- function(stackin) {
   if (!is.na(stackin$data[1])) {
     for (i in 1:length(stackin$data)) {
       cat(toString(stackin$data[i]))
-      cat(", ")
+      cat(" ")
     }
 	  cat("\n")
   }
@@ -190,7 +190,7 @@ print.queue <- function(qin) {
   if (!is.na(qin$data[1])) {
     for (i in 1:length(qin$data)) {
       cat(toString(qin$data[i]))
-      cat(", ")
+      cat(" ")
     }
     cat("\n")
   }
@@ -215,7 +215,7 @@ push.queue <- function(qin, xin) {
     qin$data[1] <- xin
   }
   else {
-    qin$data <- c(qin$data, xin)  
+    qin$data <- c(qin$data, xin)
   }
 	
 	return (qin)
