@@ -135,7 +135,7 @@ tree_insert <- function(treein, xin, i){
 ############## STACK ##############
 ###################################
 
-#' Create a new Binary Tree data structure
+#' Create a new Stack data structure
 #' 
 #' @param none
 #' @return An S3 class of type "stack", with a member vector initialized to NA
@@ -200,6 +200,12 @@ push.stack <- function(stackin, xin) {
 ############## QUEUE ##############
 ###################################
 
+#' Create a new Queue data structure
+#' 
+#' @param none
+#' @return An S3 class of type "queue", with a member vector initialized to NA
+#' @examples 
+#' myqueue <- newqueue()
 newqueue <- function() {
 
 	rtn <- list(data=c(NA))
@@ -207,6 +213,12 @@ newqueue <- function() {
 	return (rtn)
 }
 
+#' Prints the elements of a queue object separated by spaces
+#' 
+#' @param qin A queue class object
+#' @return none
+#' @examples 
+#' print(myqueue)
 print.queue <- function(qin) {
   if (!is.na(qin$data[1])) {
     for (i in 1:length(qin$data)) {
@@ -217,6 +229,13 @@ print.queue <- function(qin) {
   }
 }
 
+#' Return and remove the first element in a queue object
+#' 
+#' @param qin A queue class object
+#' @param name The string equivalent to the name of the qin parameter
+#' @return rtrn The fist element in qin
+#' @examples 
+#' element <- pop(myqueue, "myqueue")
 pop.queue <- function(qin, name) {
 	rtn <- qin$data[1]
 	qin$data <- qin$data[-1]
@@ -227,6 +246,13 @@ pop.queue <- function(qin, name) {
 	return (rtn)
 }
 
+#' Insert an element into the queue
+#' 
+#' @param qin A queue class object
+#' @param xin The element to add to the queue
+#' @return qin The modified queue object with the new element inserted 
+#' @examples 
+#' myqueue <- push(myqueue, 10)
 push.queue <- function(qin, xin) {
 
 	if (is.na(xin)) {
